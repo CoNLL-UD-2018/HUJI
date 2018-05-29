@@ -25,11 +25,13 @@ for row in $(jq -r '.[] | @base64' < $inputDataset/metadata.json); do
     continue
   fi
   data=$inputDataset/${l[psegmorfile]}
-  if [ ! -f $data ]; then
+  if [ ! -f $data ]; then  # If UDPipe-processed data does not exist, try to use gold data (trial?)
     data=$inputDataset/${l[goldfile]}
   fi
   python -m tupa --verbose=1 $data -m $model -o $outputDir/$code
+  # Join all TUPA output files to one
   #tail -n +1 $outputDir/$code/* | sed 's/==> .*\/\(.\+\)\..* <==/# sent_id = \1/' | cat -s > $outputDir/${l[outfile]}
-  tail -n +1 $outputDir/$code/* | sed '/==> .*\/\(.\+\)\..* <==/d' | cat -s > $outputDir/${l[outfile]}
+  #tail -n +1 $outputDir/$code/* | sed '/==> .*\/\(.\+\)\..* <==/d' | cat -s > $outputDir/${l[outfile]}
+  python -m semstr.scripts.join $outputDir/${l[outfile]} $data $outputDir/$code
   rm -rf $outputDir/$code
 done
