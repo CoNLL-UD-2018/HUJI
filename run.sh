@@ -21,12 +21,12 @@ for row in $(jq -r '.[] | @base64' < $inputDataset/metadata.json); do
   done
   code=${l[lcode]}_${l[tcode]}
   model=/media/data/models/$code-${MODELS[$code]}
-  if [ ! -f $model.json ]; then
-    continue
-  fi
   data=$inputDataset/${l[psegmorfile]}
   if [ ! -f $data ]; then  # If UDPipe-processed data does not exist, try to use gold data (trial?)
     data=$inputDataset/${l[goldfile]}
+  fi
+  if [ ! -f $model.json ]; then
+    cp -v $data $outputDir/$code
   fi
   python -m tupa --verbose=1 $data -m $model -o $outputDir/$code
   # Join all TUPA output files to one
