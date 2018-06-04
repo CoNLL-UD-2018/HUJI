@@ -37,7 +37,7 @@ for row in $(jq -r '.[] | @base64' < $inputDataset/metadata.json); do
     cp -v $data $outputDir/$code
     continue
   fi
-  python -m tupa --verbose=1 $data -m $model -o $outputDir/$code
+  python -m tupa --verbose=1 $data -m $model -o $outputDir/$code -e
   # Join all TUPA output files to one
   #tail -n +1 $outputDir/$code/* | sed 's/==> .*\/\(.\+\)\..* <==/# sent_id = \1/' | cat -s > $outputDir/${l[outfile]}
   #tail -n +1 $outputDir/$code/* | sed '/==> .*\/\(.\+\)\..* <==/d' | cat -s > $outputDir/${l[outfile]}
