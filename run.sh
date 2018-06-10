@@ -21,23 +21,24 @@ for row in $(jq -r '.[] | @base64' < $inputDataset/metadata.json); do
     l[$var]=$(echo $row | base64 --decode | jq -r .$var)
   done
   code=${l[lcode]}_${l[tcode]}
-  default=${DEFAULT_MODELS[${l[lcode]}]}
   model=$modelsDir/$code-${MODELS[$code]}
   data=$inputDataset/${l[psegmorfile]}
+  default=${DEFAULT_MODELS[${l[lcode]}]}
+  default_model=$modelsDir/$default-${MODELS[$default]}
   if [ ! -f $data ]; then  # If UDPipe-processed data does not exist, try to use gold data (trial?)
     data=$inputDataset/${l[goldfile]}
   fi
   if [ -f $model.json ]; then
     echo model $model found
-  elif [ -n "$default" ]; then
-    model=$modelsDir/$default-${MODELS[$default]}
+  elif [ -f "$default_model" ]; then
+    model=$default_model
     echo model not found, using $model instead
   else  # Copy from baseline output
     echo model not found, copying from baseline output
     cp -v $data $outputDir/$code
     continue
   fi
-  python -m tupa --verbose=1 $data -m $model -o $outputDir/$code -e
+  python -m tupa --verbose=1 $data -m $model -o $outputDir/$code -e --lang=${l[lcode]}
   # Join all TUPA output files to one
   #tail -n +1 $outputDir/$code/* | sed 's/==> .*\/\(.\+\)\..* <==/# sent_id = \1/' | cat -s > $outputDir/${l[outfile]}
   #tail -n +1 $outputDir/$code/* | sed '/==> .*\/\(.\+\)\..* <==/d' | cat -s > $outputDir/${l[outfile]}
