@@ -14,6 +14,8 @@ fi
 inputDataset=$1
 outputDir=$2
 modelsDir=/media/data/models
+global_default=en_ewt
+global_default_model=$modelsDir/$global_default-${MODELS[$global_default]}
 
 for row in $(jq -r '.[] | @base64' < $inputDataset/metadata.json); do
   declare -A l=()
@@ -30,15 +32,15 @@ for row in $(jq -r '.[] | @base64' < $inputDataset/metadata.json); do
   fi
   if [ -f $model.json ]; then
     echo model $model found
-  elif [ -f "$default_model" ]; then
-    model=$default_model
+  else
+    if [ -f "$default_model" ]; then
+      model=$default_model
+    else
+      model=$global_default_model
+    fi
     echo model not found, using $model instead
-  else  # Copy from baseline output
-    echo model not found, copying from baseline output
-    cp -v $data $outputDir/$code
-    continue
   fi
-  python -m tupa --verbose=1 $data -m $model -o $outputDir/$code -e --lang=${l[lcode]}
+  python -m tupa --verbose=1 $data -m $model -o $outputDir/$code -e --lang=${l[lcode]} --max-length 300 --vocab=-
   # Join all TUPA output files to one
   #tail -n +1 $outputDir/$code/* | sed 's/==> .*\/\(.\+\)\..* <==/# sent_id = \1/' | cat -s > $outputDir/${l[outfile]}
   #tail -n +1 $outputDir/$code/* | sed '/==> .*\/\(.\+\)\..* <==/d' | cat -s > $outputDir/${l[outfile]}
