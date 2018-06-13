@@ -40,7 +40,7 @@ for row in $(jq -r '.[] | @base64' < $inputDataset/metadata.json); do
     fi
     echo model not found, using $model instead
   fi
-  python -m tupa --verbose=1 $data -m $model -o $outputDir/$code -e --lang=${l[lcode]} --max-length 300
+  python -m tupa --verbose=1 $data -m $model -o $outputDir/$code --lang=${l[lcode]} --max-length 300
   # Join all TUPA output files to one
   #tail -n +1 $outputDir/$code/* | sed 's/==> .*\/\(.\+\)\..* <==/# sent_id = \1/' | cat -s > $outputDir/${l[outfile]}
   #tail -n +1 $outputDir/$code/* | sed '/==> .*\/\(.\+\)\..* <==/d' | cat -s > $outputDir/${l[outfile]}
