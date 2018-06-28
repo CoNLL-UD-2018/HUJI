@@ -30,20 +30,22 @@ for row in $(jq -r '.[] | @base64' < $inputDataset/metadata.json); do
   if [ ! -f $data ]; then  # If UDPipe-processed data does not exist, try to use gold data (trial?)
     data=$inputDataset/${l[goldfile]}
   fi
-  if [ -f $model.json ]; then
+  if [ -f "$model.json" ]; then
     echo model $model found
   else
-    if [ -f "$default_model" ]; then
+    echo default code: $default
+    echo default model: $default_model
+    if [ -f "$default_model.json" ]; then
       model=$default_model
     else
       model=$global_default_model
     fi
     echo model not found, using $model instead
   fi
-  python -m tupa --verbose=1 $data -m $model -o $outputDir/$code --lang=${l[lcode]} --max-length 300
+  python -m tupa --verbose=1 $data -m $model -o $outputDir -j $code --lang=${l[lcode]} --max-length 300
   # Join all TUPA output files to one
   #tail -n +1 $outputDir/$code/* | sed 's/==> .*\/\(.\+\)\..* <==/# sent_id = \1/' | cat -s > $outputDir/${l[outfile]}
   #tail -n +1 $outputDir/$code/* | sed '/==> .*\/\(.\+\)\..* <==/d' | cat -s > $outputDir/${l[outfile]}
-  python -m semstr.scripts.join $outputDir/${l[outfile]} $data $outputDir/$code
-  rm -rf $outputDir/$code
+  #python -m semstr.scripts.join $outputDir/${l[outfile]} $data $outputDir/$code
+  #rm -rf $outputDir/$code
 done
