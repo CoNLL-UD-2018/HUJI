@@ -23,8 +23,9 @@ For more information, please see the [official TUPA code repository](https://git
 
 ### Training
 
-- Download the [UD treebanks](http://hdl.handle.net/11234/1-2837) and extract them (e.g. to `../data/ud-treebanks-v2.2`).
-- Run `train_conll2018.sh` to train a model on each treebank. For example, to train on `../data/ud-treebanks-v2.2/UD_English-EWT`, run:
+Download the [UD treebanks](http://hdl.handle.net/11234/1-2837) and extract them (e.g. to `../data/ud-treebanks-v2.2`).
+
+Run `train_conll2018.sh` to train a model on each treebank. For example, to train on `../data/ud-treebanks-v2.2/UD_English-EWT`, run:
 
     ./train_conll2018.sh ../data/ud-treebanks-v2.2/UD_English-EWT
 
@@ -35,30 +36,32 @@ Or, if you have a [slurm](https://slurm.schedmd.com) cluster, just run
 
 ### Parsing
 
-- Either download the [pre-trained models](https://github.com/CoNLL-UD-2018/HUJI/releases/tag/udst2018), or train your own (see above). If you trained your own models, update their suffixes in `activate_models_conll2018.sh`.
-- To parse the test treebanks, run `run_conll2018.sh` using slurm:
+Either download the [pre-trained models](https://github.com/CoNLL-UD-2018/HUJI/releases/tag/udst2018), or train your own (see above). If you trained your own models, update their suffixes in `activate_models_conll2018.sh`.
+
+To parse the test treebanks, run `run_conll2018.sh` using slurm:
 
     sbatch --array=1-121 run_conll2018.sh
 
-- To parse the development treebanks, run:
+To parse the development treebanks, run:
 
     sbatch --array=1-121 run_conll2018.sh dev
 
 
 ### Evaluation
 
-- Either run the models yourself (see above), or download the [system outputs](https://github.com/CoNLL-UD-2018/HUJI/releases/download/udst2018/tupa_conll2018_output.tar.gz).
-- To get LAS-F1 scores for test treebanks, run:
+Either run the models yourself (see above), or download the [system outputs](https://github.com/CoNLL-UD-2018/HUJI/releases/download/udst2018/tupa_conll2018_output.tar.gz).
 
-    eval_conll2018.sh
+To get LAS-F1 scores for test treebanks, run:
+
+    ./eval_conll2018.sh
     
-- To get LAS-F1 scores for dev treebanks, run:
+To get LAS-F1 scores for dev treebanks, run:
 
-    eval_conll2018.sh dev
+    ./eval_conll2018.sh dev
 
-- For evaluation of enhanced dependencies, run:
+For evaluation on enhanced dependencies, run:
 
-    eval_enhanced_conll2018.sh
+    ./eval_enhanced_conll2018.sh
 
 
 Author
