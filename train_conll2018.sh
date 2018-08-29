@@ -15,7 +15,7 @@ else
 fi
 echo ${TRAIN_ARGS[@]}
 
-TREEBANK_DIR=$(readlink -f ${TRAIN_ARGS[0]})  # Subdirectory of ../data/release-2.2-st-train-dev-data/ud-treebanks-v2.2/
+TREEBANK_DIR=$(readlink -f ${TRAIN_ARGS[0]})  # Subdirectory of ../data/ud-treebanks-v2.2/
 TRAIN_ARGS=("${TRAIN_ARGS[@]:1}")
 if [[ ${#TRAIN_ARGS} -lt 1 ]]; then
   SUFFIX=`date '+%Y%m%d'`
@@ -30,6 +30,7 @@ if [ ! -d ${TREEBANK_DIR} ]; then
 fi
 
 . ./activate_conll2018.sh
+mkdir -p ../word_vectors ../converted/ud-treebanks-v2.2 models/conll2018
 
 TREEBANK_DIR_BASENAME=$(basename ${TREEBANK_DIR})
 TRAIN_FILE=${TREEBANK_DIR}/*-ud-train.conllu
