@@ -3,8 +3,8 @@
 echo $*
 
 cd ~/tupa
-. ./activate_parse.sh
-. ./activate_models.sh
+. ./activate_conll2018.sh
+. ./activate_models_conll2018.sh
 
 if [[ $# -lt 1 ]]; then
   echo "Usage: $0 inputDataset outputDir"

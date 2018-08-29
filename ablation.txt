@@ -1,0 +1,7 @@
+en_ewt-20180730
+en_ewt-20180730-no-w2v
+en_ewt-20180730-no-w2v-remote
+en_ewt-20180730-no-remote
+en_ewt-20180730-no-ner
+en_ewt-20180730-no-pos
+en_ewt-20180730-no-ner-remote
