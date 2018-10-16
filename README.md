@@ -31,18 +31,27 @@ Run `train_conll2018.sh` to train a model on each treebank. For example, to trai
 
 Or, if you have a [slurm](https://slurm.schedmd.com) cluster, just run
 
-    sbatch --array=1-122 train_conll2018.sh
+    sbatch --array=1-121 train_conll2018.sh
 
+to train models for all treebanks.
 
 ### Parsing
 
 Either download the [pre-trained models](https://github.com/CoNLL-UD-2018/HUJI/releases/tag/udst2018), or train your own (see above). If you trained your own models, update their suffixes in `activate_models_conll2018.sh`.
 
-To parse the test treebanks, run `run_conll2018.sh` using slurm:
+To parse the test treebanks, run `run_conll2018.sh`. For example:
+
+    ./run_conll2018.sh ../data/ud-treebanks-v2.2/UD_English-EWT
+
+Or parse all test treebanks using slurm:
 
     sbatch --array=1-121 run_conll2018.sh
 
 To parse the development treebanks, run:
+
+    ./run_conll2018.sh ../data/ud-treebanks-v2.2/UD_English-EWT dev
+
+Or parse all development treebanks using slurm:
 
     sbatch --array=1-121 run_conll2018.sh dev
 
