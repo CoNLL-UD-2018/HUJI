@@ -3,13 +3,19 @@
 #SBATCH --time=1-0
 
 if [[ -z "${SLURM_ARRAY_TASK_ID}" ]]; then
-  echo Run this as:
-  echo "sbatch --array=1-121%5 run_conll2018.sh test"
-  exit 1
+  if [[ $# -lt 2 ]]; then
+    echo Run this as:
+    echo "sbatch --array=1-121%5 run_conll2018.sh test"
+    exit 1
+  else
+    TREEBANK_DIR=$1
+    shift
+  fi
+else
+  TREEBANK_DIR=$(readlink -f $(sed -n ${SLURM_ARRAY_TASK_ID}p waiting.txt))
 fi
 DIV=test
 [[ $# -ge 1 ]] && DIV=$1
-TREEBANK_DIR=$(readlink -f $(sed -n ${SLURM_ARRAY_TASK_ID}p waiting.txt))
 if [ ! -d ${TREEBANK_DIR} ]; then
   echo Not a directory: ${TREEBANK_DIR}
   exit 1
